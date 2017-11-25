@@ -1,52 +1,18 @@
-# Toshi SOFA App
+# SUNAT Hackathon TOSHI APP
 
-This repo helps you build a [Toshi app](https://www.toshi.org) in Javascript.
+La aplicación BOT en TOSHI para ejecutar los pagos online desde tu billetera privada de dinero digital.
 
-The sample bot can:
+Miembros del equipo:
 
-* send messages
-* send and request money
-* create simple UI for buttons and menus
-* store sessions and state for each user
-
-TODO
-
-* sending image messages
-* creating web view UIs
-
-## Launch your own Toshi app in 5 minutes
-
-Read our [guide to creating a Toshi app](http://developers.toshi.org/docs/creating-a-token-app).
-
-When ready, fork this repo and deploy it to Heroku.
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-
-Then check out [`src/bot.js`](src/bot.js) to start changing the bot logic.
-
-## Running locally with Docker
-
-You can run the project locally with
-
-```
-docker-compose up
-```
-
-If any new depencies are added you can rebuild the project with
-
-```
-docker-compose build
-```
-
-To reset the postgres database in your dev environment you can use
-
-```
-docker-compose down -v
-```
+* Juan José Miranda del Solar - Lider
+* Alonso Rejas
+* Manuel Hohagen Serpa
+* Victor David Ramos Brast
+* Roberto Principe - Documentador
 
 ## Architecture
 
-Deploying a Toshi app requires a few processes to run:
+Deploying a SUNAT TOSSHI app requires a few processes to run:
 
 * **toshi-headless-client**<br>
   This is a client we provide (similar to the iOS or Android client) that provides a wrapper around the Toshi backend services. It also handles end-to-end encrypting all messages using the Signal protocol. It is written in Java and runs in the background, proxying all the requests to and from your bot.
@@ -59,6 +25,3 @@ Deploying a Toshi app requires a few processes to run:
 
 ![diagram](docs/images/app-architecture.png)
 
-## See also
-
-* [https://www.toshi.org]
