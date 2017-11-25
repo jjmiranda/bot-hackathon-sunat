@@ -1,0 +1,34 @@
+title SUNAT APP Hackathon
+
+Ionic->+Backend: Registrar usuario
+Backend->-Ionic: Usuario registrado
+
+Ionic->+Backend: Loguear usuario
+Backend->-Ionic: Usuario logueado
+
+Ionic->+Backend: Crear CPE B/F (DNI/RUC)
+note right of Backend:
+    Crear los productos que no existen en
+    base al código de barras
+end note
+Backend->Facturador: Dejar TXT en folder para facturar
+Facturador->+SUNAT: Genera la factura
+SUNAT->-Facturador: Devuelve el CDR
+Backend->Facturador: Timer recupera el CDR del folder
+
+ToshiApp->Backend: Documentos por pagar (DNI/RUC)
+Backend->ToshiApp: Lista de documentos por pagar
+ToshiApp->BilleVendedor: Deposito de su pago
+ToshiApp->BilleSunat: Pago del impuesto en línea
+ToshiApp->Backend: Documento pagado (RUC-NUMSERIE-CORRE)
+
+Backend->-Contable: Registrar documento y pago para el contable
+
+Ionic->+Backend: Solitar datos de dashboard
+Backend->-Ionic: Lista de datos para el dashboard
+Ionic->+Backend: Solicitar comprobantes recibidos (RUC/DNI)
+Backend->-Ionic: Lista de comprobantes recibidos
+Ionic->+Backend: Solicitar comprobantes emitidos
+Backend->-Ionic: Lista de comprobantes emitidos
+Ionic->+Backend: Solicitar descripción de producto (DIN)
+Backend->-Ionic: Detalle del producto si existe
