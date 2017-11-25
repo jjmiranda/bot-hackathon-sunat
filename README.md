@@ -10,6 +10,10 @@ Miembros del equipo:
 * Victor David Ramos Brast
 * Roberto Principe - Documentador
 
+## Diagrama de secuencia de los diferentes componentes de la aplicación
+
+![secuencia](docs/images/diagramsecuence.png)
+
 ## Architecture
 
 Deploying a SUNAT TOSSHI app requires a few processes to run:
