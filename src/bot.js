@@ -1,136 +1,257 @@
-const SOFA = require('sofa-js');
-const Bot = require('./lib/Bot');
+const Bot = require('./lib/Bot')
+const SOFA = require('sofa-js')
+const Fiat = require('./lib/Fiat')
+const unit = require('ethjs-unit')
+const http = require('http')
+const querystring = require('querystring')
 
-let bot = new Bot();
+let bot = new Bot()
 
-bot.hear('SOFA::PaymentRequest:', (session, message) => {
-  let limit = unit.toWei(5, 'ether');
+// ROUTING
 
-  if (message.value.lt(limit)) {
-    if (session.get('human')) {
-      session.reply("Ok! I'll send you some cash.")
-      session.sendEth(message.value)
-    } else {
-      session.set('ethRequestPendingCaptcha', message.value)
-      session.openThread('captcha')
+bot.onEvent = function(session, message) {
+  switch (message.type) {
+    case 'Init':
+      initMe(session)
+      break
+    case 'Message':
+      onMessage(session, message)
+      break
+    case 'Command':
+      onCommand(session, message)
+      break
+    case 'Payment':
+      onPayment(session, message)
+      break
+    case 'PaymentRequest':
+      noooPaymentRequest(session)
+      break
+  }
+}
+
+function onMessage(session, message) {
+  if (session.get('registrado') == 0){
+    pedirID(session, message)
+  }
+  else {
+    message = `En que te puedo ayudar ` + session.get('user_id')
+    botonesPrincipales(session, message)
+  }
+}
+
+function onCommand(session, command) {
+  switch (command.content.value) {
+    case 'si':
+      siEstaBien(session)
+      break
+    case 'no':
+      noEstaBien(session)
+      break
+    case 'pagar':
+      jalarPendientesPago(session,session.get('user_id'))
+      break
+    case 'nada':
+      nada(session)
+      break
+    default:
+      requestPago(session, command.content.value.monto, command.content.value.emisor, command.content.value.serie)
+      break  
+    }
+}
+
+function onPayment(session, message) {
+  console.log(message)
+  if (message.fromAddress == session.config.paymentAddress) {
+    // handle payments sent by the bot
+    if (message.status == 'confirmed') {
+      // perform special action once the payment has been confirmed
+      // on the network
+      session.reply(`onPayment pago enviado por el BOT!`)
+    } else if (message.status == 'error') {
+      // oops, something went wrong with a payment we tried to send!
+      session.reply(`error onPayment pago enviado por el BOT!`)
     }
   } else {
-    session.reply("I have a 5 ETH limit.");
+    // handle payments sent to the bot
+    if (message.status == 'unconfirmed') {
+      // payment has been sent to the ethereum network, but is not yet confirmed
+      botonesPrincipales(session, `Gracias por el pago.`);
+    } else if (message.status == 'confirmed') {
+      // handle when the payment is actually confirmed!
+      session.reply(`Pago confirmado!`)
+    } else if (message.status == 'error') {
+      botonesPrincipales(session, `There was an error with your payment!🚫`);
+    }
   }
-})
+}
 
+function noooPaymentRequest(session) {
+  session.reply(`No te podemos enviar dinero que ya no es tuyo ;)`)
+  message = `En que te puedo ayudar ` + session.get('user_id')
+  botonesPrincipales(session, message)
+}
 
-bot
-  .thread('captcha')
-  .onOpen = (session) => {
-    session.reply("I need you to prove you're human. Type the numbers below:")
-    session.reply("123")
-    session.set('captcha', '123')
-    session.set('captcha_attempts', 3)
-    session.setState('awaiting_captcha_solve')
-  }
-
-
-bot
-  .thread('captcha')
-  .state('awaiting_captcha_solve')
-  .hear('SOFA::Message:', (session, message) => {
-    console.log(message.content.body)
-    console.log(session.get('captcha'))
-    if (message.content.body == session.get('captcha')) {
-      session.set('human', true)
-      session.reply('Correct!')
-      session.sendEth(session.get('ethRequestPendingCaptcha'))
-      session.closeThread()
+function onPaymentRequest(session, message) {
+  //fetch fiat conversion rates
+  Fiat.fetch().then((toEth) => {
+    let limit = toEth.USD(100)
+    if (message.ethValue < limit) {
+      session.sendEth(message.ethValue, (session, error, result) => {
+        if (error) { session.reply('I tried but there was an error') }
+        if (result) { session.reply('Here you go!') }
+      })
     } else {
-      if (session.get('captcha_attempts') > 0) {
-        session.set('captcha_attempts', session.get('captcha_attempts')-1)
-        session.reply('Incorrect, try again')
-      } else {
-        session.reply('Too many failures. #bye')
-        session.closeThread()
-      }
+      session.reply('Sorry, I have a 100 USD limit.')
     }
   })
+  .catch((error) => {
+    session.reply('Sorry, something went wrong while I was looking up exchange rates')
+  })
+}
 
+// STATES
 
-bot.hear('ping', (session, message) => {
-  session.rpc({
-    method: "ping",
-    params: {}
-  }, (session, error, result) => {
-    console.log(result);
-    session.reply(result.message);
+function initMe(session) {
+  //session.reply(SOFA.InitRequest({
+  //  values: ['paymentAddress', 'language']
+  //}));
+  session.set('registrado', 0)
+  session.reply(`Bienvenido a la aplicación digital de SUNAT`)
+  session.reply(`Danos tu DNI o tu RUC para saber quien eres:`)
+}
+
+function pedirID(session,message) {
+  session.set('user_id',message.content.body) //TODO: Validar que lo que se meta es un DNI o RUC valido.
+    session.reply(SOFA.Message({
+      body: `Es correcto: ` + message.content.body,
+      controls: [
+        {type: 'button', label: 'Si', value: 'si'},
+        {type: 'button', label: 'No, corregir', value: 'no'}
+      ],
+      showKeyboard: false,
+    }))
+}
+
+function siEstaBien(session) {
+  session.set('registrado',1)
+  session.reply(`Gracias por registrarte con nosotros ` + session.get('user_id'))
+  let message = `En que te puedo ayudar ahora:`
+  botonesPrincipales(session, message)
+}
+
+function noEstaBien(session) {
+  session.set('registrado',0)
+  let message = `Por favor vuelve a ingresar correctamente tu DNI o tu RUC`
+  session.reply(SOFA.Message({
+    body: message,
+    controls: [],
+    showKeyboard: true,
+  }))
+}
+
+function jalarPendientesPago(session, idDoc) {
+  let post_data = JSON.stringify( JSON.parse('{"documento":' + idDoc + '}') )
+  console.log(post_data)
+  let post_options = {
+      host: '190.81.160.212',
+      port: '8081',
+      path: '/api/tienda/listar-ventas-pendientes',
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(post_data)
+      }
+  };
+  let post_req = http.request(post_options, function(res) {
+    var output = '';
+    res.setEncoding('utf8');
+    res.on('data', function (chunk) {
+        output += chunk;
+    });
+    res.on('end', function () {
+        let obj = JSON.parse(output.trim());
+        console.log('resultado = ', obj);
+        let docsPagar = []
+        for (var i = 0, len = obj.resultado.length; i < len; i++) {
+          let total = obj.resultado[i].total
+          let serie = obj.resultado[i].serie
+          let emisor = obj.resultado[i].emisor
+          docsPagar.push({type: 'button', label: 'S/'+total+' '+emisor, value: {monto:total ,emisor:emisor, serie:serie}})
+        }
+        let message = `Tus documentos por pagar son los siguientes:`
+        session.reply(SOFA.Message({
+          body: message,
+          controls: docsPagar,
+          showKeyboard: false,
+        }))
+    });
   });
-})
+  post_req.write(post_data);
+  post_req.end();
+}
 
-bot.hear('reset', (session, message) => {
-  session.reset()
-  session.reply(SOFA.Message({body: "I've reset your state."}));
-})
+function requestPago(session, monto, emisor, serie) {
+  //session.reply(`Ejecutar las funciones para pagar S/` + monto)
+  Fiat.fetch().then((toEth) => {
+    // convert 20 US dollars to ETH.
+    let amount = toEth.PEN(parseFloat(monto))
+    session.requestEth(amount, serie)
+  })
+  let post_data = JSON.stringify( JSON.parse('{"serie":' + serie + '}') )
+  //console.log(post_data)
+  let post_options = {
+      host: '190.81.160.212',
+      port: '8081',
+      path: '/api/tienda/actualizar-venta-receptor',
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(post_data)
+      }
+  };
+  let post_req = http.request(post_options, function(res) {
+    var output = '';
+    res.setEncoding('utf8');
+    res.on('data', function (chunk) {
+        output += chunk;
+    });
+    res.on('end', function () {
+        let obj = JSON.parse(output.trim());
+        console.log('resultado = ', obj);
+    });
+  });
+  post_req.write(post_data);
+  post_req.end();
+}
 
-bot.hear('SOFA::Payment:', (session, message) => {
-  session.reply("Thanks for the loot.");
-})
+function nada(session) {
+  let message = `Perfecto, te esperamos en tu próximo pago`
+  botonesPrincipales(session, message)
+}
 
-bot.hear('initMe', (session, message) => {
-  session.reply(SOFA.InitRequest({
-    values: ['paymentAddress', 'language']
-  }));
-})
+// example of how to store state on each user
+function count(session) {
+  let count = (session.get('count') || 0) + 1
+  session.set('count', count)
+  sendMessage(session, `${count}`)
+}
 
-bot.hear('begMe', (session, message) => {
-  session.reply(SOFA.PaymentRequest({
-    body: "Thanks for the great time! Can you send your share of the tab?",
-    value: "0xce0eb154f900000",
-    destinationAddress: "0x056db290f8ba3250ca64a45d16284d04bc6f5fbf"
-  }));
-})
+function donate(session) {
+  // request $1 USD at current exchange rates
+  Fiat.fetch().then((toEth) => {
+    session.requestEth(toEth.USD(1))
+  })
+}
 
-bot.hear('SOFA::Command:', (session, message) => {
-  session.reply("I was commanded: "+message.content.value);
-})
+// HELPERS
 
-bot.hear('buttons', (session, message) => {
+function botonesPrincipales(session, message) {
   session.reply(SOFA.Message({
-    body: "Now let’s try sending some money. Choose a charity to make a donation of $0.01.",
+    body: message,
     controls: [
-      {type: "button", label: "Red Cross", value: "red-cross"},
-      {type: "button", label: "Ethereum foundation", value: "ethereum-foundation"},
-      {type: "button", label: "GiveWell.org", value: "givewell.org"},
-      {type: "button", label: "Not now, thanks", value: null}
-    ]
-  }));
-})
-
-bot.hear('groups', (session, message) => {
-  session.reply(SOFA.Message({
-    body: "What would you like me to do for you right now?",
-    controls: [
-      {
-        type: "group",
-        label: "Trip",
-        controls: [
-          {type: "button", label: "Directions", action: "Webview:/Directions"},
-          {type: "button", label: "Timetable", value: "timetable"},
-          {type: "button", label: "Exit Info", value: "exit"},
-          {type: "button", label: "Service Conditions", action: "Webview:/ServiceConditions"}
-        ]
-      },{
-        type: "group",
-        label: "Services",
-        controls: [
-          {type: "button", label: "Buy Ticket", action: "buy-ticket"},
-          {type: "button", label: "Support", value: "support"}
-        ]
-      },
-      {type: "button", label: "Nothing", value: -1}
+      {type: 'button', label: 'Pagar', value: 'pagar'},
+      {type: 'button', label: 'Nada, gracias', value: 'nada'}
     ],
-    showKeyboard: false
-  }));
-})
-
-
-bot.hear('SOFA::Message:', (session, message) => {
-  session.reply("Hello "+session.address+"! You can say these things:\n1. ping\n2. reset\n3. initMe\n4. buttons\n5. groups\n6. begMe");
-});
+    showKeyboard: false,
+  }))
+}
