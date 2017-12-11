@@ -1,0 +1,16 @@
+page-welcome {
+  .wrapper {
+    display: block;
+    height: 100%;
+    text-align: center;
+    padding: 1em;
+    background-image: linear-gradient(#fff 75%, #014a9b);
+    &>img {
+      margin-top: 2em;
+      margin-bottom: 2em;
+    }
+    & button {
+      margin-top: 2em;
+    }
+  }
+}

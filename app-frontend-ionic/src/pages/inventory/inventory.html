@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons start>
+      <button ion-button icon-only (click)="sharing.presentPopover($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>Inventario</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="filterItems(inventoryData)" placeholder="Buscar por nombre"></ion-searchbar>
+
+  <h4>Legenda</h4>
+
+  <ion-item>
+    <ion-label class="check">
+      <span style="color: #fc8684; font-size: 20px">&#9679;</span>
+      <strong>Listar productos cuyas <br/> cantidades sean menores a 50</strong>
+    </ion-label>
+    <ion-checkbox [(ngModel)]="warning"></ion-checkbox>
+  </ion-item>
+<ion-card>
+  <ion-grid>
+    <ion-row *ngFor="let item of inventoryData; let i = index" [ngClass]="{'roundIndexColumn': i%2 != 0 && item.stock > 50, 'warning': warning && item.stock < 50 }">
+      <ion-col col-12>
+        <strong>Producto</strong> {{item.nombre}}
+      </ion-col>
+      <ion-col col-12>
+        <strong>Cantidad</strong> {{item.stock}}
+      </ion-col>
+      <ion-col col-12>
+        <strong>Precio Compra</strong> {{item.precioCompra}}
+      </ion-col>
+      <ion-col col-12>
+        <strong>Precio Venta</strong> {{item.precioVenta}}
+      </ion-col>
+      <ion-col col-12>
+        <strong>Categoria</strong> {{item.categoria}}
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-card>
+</ion-content>

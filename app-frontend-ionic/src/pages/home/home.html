@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons start>
+      <button ion-button icon-only (click)="sharing.presentPopover($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>Dashboard</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-card>
+    <ion-card-header>
+      <h5>Productos con mayor margen de venta</h5>
+    </ion-card-header>
+    <ion-card-content>
+      <canvas #reporte1></canvas>
+    </ion-card-content>
+  </ion-card>
+  <p>&nbsp;</p>
+  <ion-card>
+    <ion-card-header>
+      <h5>Productos más vendidos del mes</h5>
+    </ion-card-header>
+    <ion-card-content>
+      <canvas #reporte2></canvas>
+    </ion-card-content>
+  </ion-card>
+  <p>&nbsp;</p>
+  <ion-card>
+    <ion-card-header>
+      <h5>Productos más vendidos</h5>
+    </ion-card-header>
+    <ion-card-content>
+      <canvas #reporte3></canvas>
+    </ion-card-content>
+  </ion-card>
+  <!--
+          <ion-card>
+              <ion-card-header>
+                Ventas mensual
+              </ion-card-header>
+              <ion-card-content>
+                <canvas #reporte4></canvas>
+              </ion-card-content>
+            </ion-card>
+          -->
+
+  <!--
+  <ion-list>
+    <button ion-item (click)="presentHPPModal()">
+      <ion-icon name="analytics"></ion-icon> Productos con mayor margen
+    </button>
+    <button ion-item (click)="presentMSMPModal()">
+      <ion-icon name="analytics"></ion-icon> Productos mas vendidos en el mes
+    </button>
+    <button ion-item (click)="presentMSP()">
+      <ion-icon name="analytics"></ion-icon> Productos mas vendidos
+    </button>
+  </ion-list>
+-->
+
+</ion-content>

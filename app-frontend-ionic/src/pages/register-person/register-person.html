@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Registrarse</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-segment [(ngModel)]="userType">
+    <ion-segment-button value="nat">
+      Persona Natural
+    </ion-segment-button>
+    <ion-segment-button value="jur">
+      Persona Jurídica
+    </ion-segment-button>
+  </ion-segment>
+  <form>
+    <div [ngSwitch]="userType">
+        <section *ngSwitchCase="'nat'">
+          <ion-item>
+            <ion-label floating>Nombre</ion-label>
+            <ion-input type="text" [(ngModel)]="nat.name" name="name"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>Apellido</ion-label>
+            <ion-input type="text" [(ngModel)]="nat.lastname" name="lastname"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>DNI</ion-label>
+            <ion-input type="number" [(ngModel)]="nat.dni" name="dni"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>Correo electrónico</ion-label>
+            <ion-input type="email" [(ngModel)]="nat.mail" name="mail"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>Celular</ion-label>
+            <ion-input type="number" [(ngModel)]="nat.cel" name="cel"></ion-input>
+          </ion-item>
+        </section>
+
+        <section *ngSwitchCase="'jur'">
+          <ion-item>
+            <ion-label floating>Razón Social</ion-label>
+            <ion-input type="text" [(ngModel)]="com.razsoc" name="razsoc"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>RUC</ion-label>
+            <ion-input type="number" [(ngModel)]="com.ruc" name="ruc"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>Dirección</ion-label>
+            <ion-input type="text" [(ngModel)]="com.address" name="address"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>Correo electrónico</ion-label>
+            <ion-input type="email" [(ngModel)]="com.cmail" name="cmail"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>Teléfono</ion-label>
+            <ion-input type="number" [(ngModel)]="com.tel" name="tel"></ion-input>
+          </ion-item>
+        </section>
+  </div>
+
+  <ion-item>
+    <ion-label floating>Contraseña</ion-label>
+    <ion-input type="password" [(ngModel)]="passwd" name="passwd"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label floating>Repetir Contraseña</ion-label>
+    <ion-input type="password" [(ngModel)]="passwd2" name="passwd2"></ion-input>
+  </ion-item>
+
+    <button ion-button outline type="button" (click)="back()">Anular</button>
+    <button ion-button type="submit" (click)="register();"  class="hbtn">Registrarse</button>
+  </form>
+</ion-content>

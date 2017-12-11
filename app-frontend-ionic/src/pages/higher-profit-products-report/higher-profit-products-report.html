@@ -1,0 +1,23 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Productos con mayor margen</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+    <button ion-button (click)="dismiss()">Cerrar</button>  
+
+      <ion-card>
+        <ion-card-header>
+          Bar Chart
+        </ion-card-header>
+        <ion-card-content>
+          <canvas #barCanvas></canvas>
+        </ion-card-content>
+      </ion-card>
+      
+</ion-content>

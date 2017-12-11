@@ -1,0 +1,14 @@
+#NOTAS
+
+    '''
+    def get_form(self, request, *args, **kwargs):
+        form = super(productoAdmin, self).get_form(request, *args, **kwargs)
+        objMicroempresa = microempresa.objects.get(persona__user=request.user)
+        form.base_fields['microempresa'].initial = objMicroempresa.razonSocial
+        return form
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        if db_field.name == 'microempresa':
+            kwargs['widget'] = TextInput(attrs={'style': 'width: 20em', 'readonly': ''})
+        return super(productoAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+    '''

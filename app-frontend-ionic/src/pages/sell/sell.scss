@@ -1,0 +1,36 @@
+page-sell {
+
+  ion-row{
+    border-bottom: 1px solid #aaa;
+  }
+  ion-list {
+    border: 1px solid #aaa;
+  }
+  ion-label {
+    font-size: 0.75em;
+  }
+  .button-container {
+    display: flex;
+    margin-top: 1em;
+    button {
+      flex: auto;
+    }
+  }
+  .clearfix {
+    overflow: auto;
+    &>ion-item {
+      width: 50%;
+    }
+    &>ion-item:first-child {
+      float: left;
+    }
+    &>ion-item:last-child {
+      float: right;
+    }
+  }
+  ion-grid {
+    ion-input {
+      border: 1px solid #000;
+    }
+  }
+}

@@ -1,0 +1,21 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>
+      Comprar
+      <button ion-button icon-only (click)="sharing.presentPopover($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <button ion-button type="button" (click)="encodeText();" >Enviar datos</button>
+  <button ion-button type="button" (click)="scan();" >Pagar a Vendedor</button>
+  <p>Data: {{scanData | json}}</p>
+
+</ion-content>

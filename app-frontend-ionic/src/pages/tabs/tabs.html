@@ -1,0 +1,12 @@
+<ion-tabs *ngIf="user === 've'">
+  <ion-tab [root]="tab1Root" tabTitle="Dashboard" tabIcon="home"></ion-tab>
+  <ion-tab [root]="tab2Root" tabTitle="Vender" tabIcon="ios-card"></ion-tab>
+  <ion-tab [root]="tab3Root" tabTitle="Inventario" tabIcon="ios-clipboard-outline"></ion-tab>
+  <ion-tab [root]="tab4Root" tabTitle="Comprobantes Proveedores" tabIcon="ios-document-outline"></ion-tab>
+  <ion-tab [root]="tab5Root" tabTitle="Comprobantes Emitidos" tabIcon="ios-document-outline"></ion-tab>
+</ion-tabs>
+
+<ion-tabs *ngIf="user !== 've'">
+  <ion-tab [root]="tab11Root" tabTitle="Dashboard" tabIcon="home"></ion-tab>
+  <ion-tab [root]="tab13Root" tabTitle="Comprobantes Proveedores" tabIcon="ios-document-outline"></ion-tab>
+</ion-tabs>

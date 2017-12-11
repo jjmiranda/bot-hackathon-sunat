@@ -1,0 +1,24 @@
+<ion-content>
+  <div class="wrapper">
+    <img src="assets/imgs/logo-SUNAT.png" alt="">
+    <form [formGroup]="myForm">
+      <ion-item>
+        <ion-label floating>Selecciona tu usuario</ion-label>
+        <ion-select formControlName="userType" [(ngModel)]="user.userType">
+          <ion-option value="pn">Soy Cliente</ion-option>
+          <ion-option value="ve">Soy Vendedor</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>DNI / RUC</ion-label>
+        <ion-input type="number" [(ngModel)]="user.username" formControlName="dniruc"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Contraseña</ion-label>
+        <ion-input type="password" [(ngModel)]="user.password" formControlName="clave"></ion-input>
+      </ion-item>
+      <button ion-button clear type="button" (click)="signIn()">Registrarse</button>
+      <button ion-button type="submit" (click)="login();" [disabled]="!myForm.valid || myForm.value.userType === null" >INGRESAR</button>
+    </form>
+  </div>
+</ion-content>
