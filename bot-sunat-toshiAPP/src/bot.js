@@ -153,7 +153,7 @@ function jalarPendientesPago(session, idDoc) {
   let post_data = JSON.stringify( JSON.parse('{"documento":' + idDoc + '}') )
   console.log(post_data)
   let post_options = {
-      host: '190.81.160.212',
+      host: '190.81.160.219',
       port: '8081',
       path: '/api/tienda/listar-ventas-pendientes',
       method: 'POST',
@@ -200,7 +200,7 @@ function requestPago(session, monto, emisor, serie) {
   let post_data = JSON.stringify( JSON.parse('{"serie":' + serie + '}') )
   //console.log(post_data)
   let post_options = {
-      host: '190.81.160.212',
+      host: '190.81.160.219',
       port: '8081',
       path: '/api/tienda/actualizar-venta-receptor',
       method: 'POST',
