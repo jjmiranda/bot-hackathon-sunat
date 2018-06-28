@@ -180,7 +180,7 @@ function jalarPendientesPago(session, idDoc) {
           let total = obj.resultado[i].total
           let serie = obj.resultado[i].serie
           let emisor = obj.resultado[i].emisor
-          docsPagar.push({type: 'button', label: 'S/'+total+' '+emisor, value: '{monto:'+total+' ,emisor:'+emisor+', serie:'+serie+'}'})
+          docsPagar.push({type: 'button', label: 'S/'+total+' '+emisor, value: '{monto:"'+total+'" ,emisor:"'+emisor+'", serie:"'+serie+'"}'})
         }
         let message = `Tus documentos por pagar son los siguientes:`
         session.reply(SOFA.Message({
