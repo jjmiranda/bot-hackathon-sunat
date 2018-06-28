@@ -177,18 +177,12 @@ function jalarPendientesPago(session, idDoc) {
           let total = obj.resultado[i].total
           let serie = obj.resultado[i].serie
           let emisor = obj.resultado[i].emisor
-          docsPagar.push({type: 'button', label: 'S/'+total+' '+emisor, value: {monto:total ,emisor:emisor, serie:serie}})
+          docsPagar.push({type: 'button', label: 'S/'+total+' '+emisor, value: '{monto:'+total+' ,emisor:'+emisor+', serie:'+serie+'}'})
         }
         let message = `Tus documentos por pagar son los siguientes:`
-        // session.reply(SOFA.Message({
-        //   body: message,
-        //   controls: docsPagar,
-        //   showKeyboard: false,
-        // }))
         session.reply(SOFA.Message({
-          body: `Tus documentos por pagar son los siguientes:`,
-          controls: [{type: 'button', label: 'Enrolar', value: 'app_enrrolar'},
-        {type: 'button', label: 'Aprender', value: 'app_aprender'}],
+          body: message,
+          controls: docsPagar,
           showKeyboard: false,
         }))
     });
