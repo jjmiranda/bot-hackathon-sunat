@@ -55,7 +55,7 @@ function onCommand(session, command) {
       nada(session)
       break
     default:
-      let dictionarioPago = JSON.parse(command.content.value);
+      let dictionarioPago = JSON.parse(command.content.value)
       requestPago(session, dictionarioPago.monto, dictionarioPago.emisor, dictionarioPago.serie)
       break  
     }
