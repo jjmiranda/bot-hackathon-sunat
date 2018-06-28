@@ -154,7 +154,7 @@ function noEstaBien(session) {
 
 function jalarPendientesPago(session, idDoc) {
   console.log(idDoc)
-  let post_data = JSON.stringify( JSON.parse('{"documento":' + String(idDoc) + '}') )
+  let post_data = JSON.stringify( JSON.parse('{"documento":"' + String(idDoc) + '"}') )
   console.log(post_data)
   let post_options = {
       host: '190.81.160.219',
