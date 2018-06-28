@@ -49,7 +49,8 @@ function onCommand(session, command) {
       noEstaBien(session)
       break
     case 'pagar':
-      jalarPendientesPago(session,session.get('user_id'))
+      let userID = session.get('user_id')
+      jalarPendientesPago(session, String(userID) )
       break
     case 'nada':
       nada(session)
