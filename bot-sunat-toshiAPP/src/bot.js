@@ -8,6 +8,7 @@ const querystring = require('querystring')
 let bot = new Bot()
 
 // ROUTING
+//Usar el RUC en donde estan estas facturas RUC: 10706008391
 
 bot.onEvent = function(session, message) {
   switch (message.type) {
@@ -179,9 +180,15 @@ function jalarPendientesPago(session, idDoc) {
           docsPagar.push({type: 'button', label: 'S/'+total+' '+emisor, value: {monto:total ,emisor:emisor, serie:serie}})
         }
         let message = `Tus documentos por pagar son los siguientes:`
+        // session.reply(SOFA.Message({
+        //   body: message,
+        //   controls: docsPagar,
+        //   showKeyboard: false,
+        // }))
         session.reply(SOFA.Message({
-          body: message,
-          controls: docsPagar,
+          body: `Tus documentos por pagar son los siguientes:`,
+          controls: [{type: 'button', label: 'Enrolar', value: 'app_enrrolar'},
+        {type: 'button', label: 'Aprender', value: 'app_aprender'}],
           showKeyboard: false,
         }))
     });
