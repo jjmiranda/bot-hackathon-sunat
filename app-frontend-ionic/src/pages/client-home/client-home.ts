@@ -62,7 +62,6 @@ export class ClientHomePage {
         console.log(fechaactualquery + " " + fechaactualanteriorquery);
 
         this.data.getTopTenProductsByMonth(fechaactualanteriorquery, fechaactualquery, this.sharing.dniruc).toPromise().then(products => {
-            /* if(!products.resultado.isEmpty()){*/
             const data: any = {
                 labels: [],
                 barsData: []
@@ -73,9 +72,6 @@ export class ClientHomePage {
             });
             this.generate_chart2(data);
             this.sharing.setLoader(false);
-            /*   }else{
-                 console.log("no hay productos")
-               }*/
         }, error => { console.log(error) })
 
 
@@ -127,7 +123,6 @@ export class ClientHomePage {
 
     getChartData3() {
         this.data.getBestProducts(this.sharing.dniruc).toPromise().then(products => {
-            /* if(!products.resultado.isEmpty()){*/
             const data: any = {
                 labels: [],
                 barsData: []
@@ -138,12 +133,7 @@ export class ClientHomePage {
             });
             this.generate_chart3(data);
             this.sharing.setLoader(false);
-            /*   }else{
-                 console.log("no hay productos")
-               }*/
         }, error => { console.log(error) })
-
-
     }
 
 

@@ -6,7 +6,6 @@ import { MyApp } from './app.component';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-import { WelcomePage } from '../pages/welcome/welcome';
 import { SharingProvider } from '../providers/sharing/sharing';
 import { PersonSignIn, CompanySignIn } from '../providers/entities/entities';
 

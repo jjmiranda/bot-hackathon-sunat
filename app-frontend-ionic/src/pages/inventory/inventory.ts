@@ -20,7 +20,6 @@ export class InventoryPage {
     private data: DataProvider,
     private sharing: SharingProvider
   ) {
-
       this.data.productsList(this.sharing.dniruc).toPromise()
         .then(data => {
           this.unaltered_data = data.resultado;

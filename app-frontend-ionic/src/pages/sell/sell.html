@@ -1,20 +1,20 @@
-
 <ion-header>
-<ion-toolbar>
-    <ion-buttons start>
-      <button ion-button icon-only (click)="sharing.presentPopover($event)">
+    <ion-toolbar>
+        <ion-buttons start>
+            <button ion-button icon-only (click)="sharing.presentPopover($event)">
         <ion-icon name="more"></ion-icon>
       </button>
-    </ion-buttons>
-    <ion-title>generar Venta</ion-title>
-  </ion-toolbar>
+        </ion-buttons>
+        <ion-title>generar Venta</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 
 <ion-content padding>
-  <h5>
-    Lista productos
-  </h5><!--
+    <h5>
+        Lista productos
+    </h5>
+    <!--
   <ion-list>
     <ion-item  *ngFor="let item of products; let i = index">
       <ion-input align="center" type="number" [(ngModel)]="item.quantity" max="item.stock" (change)="calculateTotal(products)">{{item.quantity}}</ion-input>
@@ -24,86 +24,85 @@
     </ion-item>
   </ion-list>
 -->
-<ion-card>
-<ion-grid>
-  <ion-row  class="tableHeader">
-    <ion-col col-3 class="smallerLetters">
-      <strong>Producto</strong>
-    </ion-col>
-    <ion-col col-2 class="smallerLetters">
-      <strong>Cantidad</strong>
-    </ion-col>
-    <ion-col col-2 class="smallerLetters">
-      <strong>Stock</strong>
-    </ion-col>
-    <ion-col col-2 class="smallerLetters">
-      <strong>Precio</strong>
-    </ion-col>
-    <ion-col col-3 class="smallerLetters">
-      <strong>Total</strong>
-    </ion-col>
-  </ion-row>
-  <ion-row *ngFor="let item of products; let i = index"  [ngClass]="{'roundIndexColumn': i%2 != 0}">
-    <ion-col col-3>
-      <div style="margin-top: 0.9em;">{{item.nombre}}</div>
-    </ion-col>
-    <ion-col col-2>
-      <ion-input align="center" type="number" [(ngModel)]="item.cantidad" max="item.stock" (change)="calculateTotal(products)">{{item.quantity}}</ion-input>
-    </ion-col>
-    <ion-col col-2>
-      <div style="margin-top: 0.9em;">{{item.stock}}</div>
-    </ion-col>
-    <ion-col col-2>
-      <div style="margin-top: 0.9em;">{{item.precioVenta}}</div>
-    </ion-col>
-    <ion-col col-3>
-      <div style="margin-top: 0.9em;">S/{{item.precioVenta * item.cantidad}}</div>
-    </ion-col>
-  </ion-row>
-  <ion-row >
-    <ion-col col-9>
-      <strong>Total</strong>
-    </ion-col>
-    <ion-col col-3>
-      S/{{total_sale}}
-    </ion-col>
-  </ion-row>
-</ion-grid>
-</ion-card>
+    <ion-card>
+        <ion-grid>
+            <ion-row class="tableHeader">
+                <ion-col col-3 class="smallerLetters">
+                    <strong>Producto</strong>
+                </ion-col>
+                <ion-col col-2 class="smallerLetters">
+                    <strong>Cantidad</strong>
+                </ion-col>
+                <ion-col col-2 class="smallerLetters">
+                    <strong>Stock</strong>
+                </ion-col>
+                <ion-col col-2 class="smallerLetters">
+                    <strong>Precio</strong>
+                </ion-col>
+                <ion-col col-3 class="smallerLetters">
+                    <strong>Total</strong>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngFor="let item of products; let i = index" [ngClass]="{'roundIndexColumn': i%2 != 0}">
+                <ion-col col-3>
+                    <div style="margin-top: 0.9em;">{{item.nombre}}</div>
+                </ion-col>
+                <ion-col col-2>
+                    <ion-input align="center" type="number" [(ngModel)]="item.cantidad" max="item.stock" (change)="calculateTotal(products)">{{item.quantity}}</ion-input>
+                </ion-col>
+                <ion-col col-2>
+                    <div style="margin-top: 0.9em;">{{item.stock}}</div>
+                </ion-col>
+                <ion-col col-2>
+                    <div style="margin-top: 0.9em;">{{item.precioVenta}}</div>
+                </ion-col>
+                <ion-col col-3>
+                    <div style="margin-top: 0.9em;">S/{{item.precioVenta * item.cantidad}}</div>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-9>
+                    <strong>Total</strong>
+                </ion-col>
+                <ion-col col-3>
+                    S/{{total_sale}}
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-card>
 
-  <div *ngIf="products.length < 1">
-    <strong>Por favor escanee los productos para su venta</strong>
-  </div>
-  <div class="clearfix">
+
+    <div *ngIf="products.length < 1">
+        <strong>Por favor escanee los productos para su venta</strong>
+    </div>
+    <div class="clearfix">
+        <ion-item>
+            <ion-label floating>Comprobante</ion-label>
+            <ion-select [(ngModel)]="sell.comp">
+                <ion-option value="boleta">Boleta</ion-option>
+                <ion-option *ngIf="dniruc.length === 11" value="factura">Factura</ion-option>
+            </ion-select>
+        </ion-item>
+        <ion-item>
+            <p>IGV 18% S/ {{total_sale - (total_sale/1.18)}}</p>
+            <p>TOTAL S/ {{total_sale}}</p>
+        </ion-item>
+    </div>
+    <div class="button-container">
+        <button ion-button (click)="scan()">Escanear</button>
+        <button ion-button (click)="add()">Agregar</button>
+    </div>
     <ion-item>
-      <ion-label floating>Comprobante</ion-label>
-      <ion-select [(ngModel)]="sell.comp">
-        <ion-option value="boleta">Boleta</ion-option>
-        <ion-option *ngIf="dniruc.length === 11" value="factura">Factura</ion-option>
-      </ion-select>
+        <ion-label floating>DNI / RUC Cliente</ion-label>
+        <ion-input type="number" [(ngModel)]="ruccl"></ion-input>
     </ion-item>
     <ion-item>
-      <p>IGV 18% S/ {{total_sale - (total_sale/1.18)}}</p>
-      <p>TOTAL S/ {{total_sale}}</p>
+        <ion-label floating>Razón Social Cliente</ion-label>
+        <ion-input type="text" [(ngModel)]="razonsocial"></ion-input>
     </ion-item>
-  </div>
-  <div class="button-container">
-    <button ion-button (click)="scan()">Escanear</button>
-    <button ion-button>Agregar</button>
-  </div>
-  <ion-item>
-    <ion-label floating>DNI / RUC Cliente</ion-label>
-    <ion-input type="number" [(ngModel)]="ruccl" ></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label floating>Razón Social Cliente</ion-label>
-    <ion-input type="text" [(ngModel)]="razonsocial" ></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label floating>E-mail Cliente</ion-label>
-    <ion-input type="text" [(ngModel)]="email" ></ion-input>
-  </ion-item>
-  <button ion-button full (click)="genCom()">Generar comprobante</button>
-
-
+    <ion-item>
+        <ion-label floating>E-mail Cliente</ion-label>
+        <ion-input type="text" [(ngModel)]="email"></ion-input>
+    </ion-item>
+    <button ion-button full (click)="genCom()">Generar comprobante</button>
 </ion-content>

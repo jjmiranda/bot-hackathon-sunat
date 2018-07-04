@@ -1,16 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { ModalController, ViewController } from 'ionic-angular';
+import { ViewController } from 'ionic-angular';
 import { Chart } from 'chart.js';
 import {DataProvider} from "../../providers/data/data";
 import {SharingProvider} from "../../providers/sharing/sharing";
-
-/**
- * Generated class for the MostSoldMonthProductsReportPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -31,15 +24,6 @@ export class MostSoldMonthProductsReportPage {
     private data: DataProvider,
     private sharing: SharingProvider
   ) {}
-    /*alert(this.sharing.dniruc);*/
-
-    /*
-    this.data.getBestProducts(this.sharing.dniruc).toPromise()
-      .then(data => {
-        console.log(data);
-      })   
-      .catch(err => {console.log(err)});
-      */
 
 ionViewDidLoad() {
   this.getChartData();
@@ -50,33 +34,31 @@ ionViewDidLoad() {
 getChartData(){
 
   var fechaactual = new Date();
-  var fechaactualanterior ;
   var dd = fechaactual.getDate();
-  var mm = fechaactual.getMonth()+1; //January is 0!
-  var mm2 = fechaactual.getMonth(); //January is 0!
+  var mm = fechaactual.getMonth()+1;
+  var mm2 = fechaactual.getMonth();
   var yyyy = fechaactual.getFullYear();
   var dia = dd.toString();
   var mes = mm.toString();
   var mes2 = mm2.toString();
   var fechaactualquery, fechaactualanteriorquery;
-  
+
   if(dd<10) {
       dia = '0'+dd
-  } 
-  
+  }
+
   if(mm<10) {
       mes = '0'+mm
-  } 
+  }
   if(mm2<10) {
     mes2 = '0'+mm2
-} 
-  
+}
+
 fechaactualquery = dia + '-' + mes + '-' + yyyy;
 fechaactualanteriorquery = dia + '-' + mes2 + '-' + yyyy;
   console.log(fechaactualquery + " " + fechaactualanteriorquery);
 
       this.data.getTopTenProductsByMonth(fechaactualanteriorquery, fechaactualquery, this.sharing.dniruc).toPromise().then(products => {
-       /* if(!products.resultado.isEmpty()){*/
           const data: any = {
             labels: [],
             barsData: []
@@ -87,67 +69,10 @@ fechaactualanteriorquery = dia + '-' + mes2 + '-' + yyyy;
           });
           this.generate_chart(data);
           this.sharing.setLoader(false);
-     /*   }else{
-          console.log("no hay productos")
-        }*/
       }, error => {console.log(error)})
-      
-      
-  }
 
-
-/*
-
-    this.barChart = new Chart(this.barCanvas.nativeElement, {
-
-      type: 'bar',
-      data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-        datasets: [{
-          label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3],
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
-            }
-          }]
-        }
-      }
-
-    });
 
   }
-
-  dismiss() {
-    this.viewCtrl.dismiss();
-  }
-
-
-}
-
-*/
-
 
 generate_chart(data){
   this.barChart = new Chart(this.barCanvas.nativeElement, {
@@ -192,7 +117,7 @@ generate_chart(data){
             beginAtZero: true
           }
         }]
-      }    
+      }
     }
 
   });

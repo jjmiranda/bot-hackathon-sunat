@@ -39,21 +39,8 @@ export class SellPage {
   scan() {
     this.barcodeScanner.scan().then((barcodeData) => {
       this.data.searchProduct(this.dniruc, barcodeData.text).toPromise().then(data =>{
+        data.resultado[0]['codigobarras'] = barcodeData.text;
         this.products.push(data.resultado[0]);
-      /*  this.products.push({
-"categoria": "comida",
-"precioCompra": 1.8,
-"stock": 23,
-"precioVenta": 2,
-"cantidad": 1,
-"descripcion": "Full cafeine!",
-"nombre": "Coca-cola original 450ml",
-"ventas": 61,
-"id": 11,
-"marca": "ACME",
-"slug": "coca-cola-original-450ml"
-});*/
-  //      this.total_sale = this.total_sale + 2;
         this.total_sale = this.total_sale + data.resultado[0].precioVenta;
       }, err =>{
         console.log(err)
@@ -70,10 +57,14 @@ export class SellPage {
   }
 
   genCom() {
-    this.data.generarComprobante(this.sharing.dniruc, 1, 1, this.ruccl, this.razonsocial, this.email, '').toPromise()
+    this.data.generarComprobante(this.sharing.dniruc, 1, 1, this.ruccl, this.razonsocial, this.email, this.products).toPromise()
     .then(data => {
       alert('Comprobante generado correctamente');
     })
     .catch(err => { console.log('Error: ', err) });
+  }
+  add() {
+    console.log('add');
+
   }
 }

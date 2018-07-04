@@ -1,16 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { ModalController, ViewController } from 'ionic-angular';
+import { ViewController } from 'ionic-angular';
 import { Chart } from 'chart.js';
 import {DataProvider} from "../../providers/data/data";
 import {SharingProvider} from "../../providers/sharing/sharing";
-
-/**
- * Generated class for the HigherProfitProductsReportPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -36,11 +29,8 @@ export class HigherProfitProductsReportPage {
     this.getChartData();
   }
 
-  getChartData(){/*
-    this.sharing.setLoader(true);
-    this.data.productsList("20532803749").toPromise().then(products => {*/
-      this.data.getBestProducts(this.sharing.dniruc).toPromise().then(products => {      
-      /*if(!products.isEmpty()){*/
+  getChartData(){
+      this.data.getBestProducts(this.sharing.dniruc).toPromise().then(products => {
         const data: any = {
           labels: [],
           barsData: []
@@ -51,9 +41,6 @@ export class HigherProfitProductsReportPage {
         });
         this.generate_chart(data);
         this.sharing.setLoader(false);
-      /*}else{
-        console.log("no hay productos")
-      }*/
     }, error => {console.log(error)})
 
   }
@@ -110,6 +97,4 @@ export class HigherProfitProductsReportPage {
   dismiss() {
     this.viewCtrl.dismiss();
   }
-
-
 }
